@@ -162,9 +162,12 @@
 
 .piano-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 24px;
   overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
 }
 
 .piano-keys {
@@ -444,6 +447,22 @@
     width: 150px;
     height: 150px;
     font-size: 1rem;
+  }
+
+  .piano-container {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    justify-content: flex-start;
+    padding: 0 4px;
+  }
+
+  .piano-container::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .piano-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 2px;
   }
 
   .answer-grid {

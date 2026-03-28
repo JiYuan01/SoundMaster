@@ -72,6 +72,9 @@ export function NoteTraining({ onBack, onUpdateGameState }) {
     // 答题前检查答案
     if (!currentNote) return;
 
+    // 播放选择的音符
+    audioEngine.playPianoNote(noteItem.note, noteItem.octave, 0.8);
+
     const correctNoteId = currentNote.note + currentNote.octave;
     const correct = noteItem.id === correctNoteId;
     setSelectedAnswer(noteItem.id);

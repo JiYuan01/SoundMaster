@@ -396,9 +396,12 @@
 
 .piano-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 24px;
   overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
 }
 
 .piano-keys {
@@ -527,6 +530,18 @@
   font-size: 0.65rem;
 }
 
+.key.white.pressed {
+  background: linear-gradient(to bottom, #4a6FE3 0%, #3657C4 100%);
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.key.black.pressed {
+  background: linear-gradient(to bottom, #5a8FE3 0%, #4677D4 100%);
+  transform: translateY(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 @media (max-width: 768px) {
   .training-header {
     flex-direction: column;
@@ -552,6 +567,22 @@
     flex-direction: column;
     gap: 12px;
     text-align: center;
+  }
+
+  .piano-container {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    justify-content: flex-start;
+    padding: 0 4px;
+  }
+
+  .piano-container::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .piano-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 2px;
   }
 
   .answer-grid {

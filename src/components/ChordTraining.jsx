@@ -12,6 +12,7 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
   const [playCount, setPlayCount] = useState(0);
   const [streak, setStreak] = useState(0);
   const [score, setScore] = useState(0);
+  const [pressedKeys, setPressedKeys] = useState(new Set());
 
   // 音符选项（C3到B5），按钢琴键盘顺序
   const pianoOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -38,10 +39,12 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
   // 播放当前和弦
   const playChord = () => {
     if (currentChord) {
-      // 解析和弦音符，提取音符名和八度
-      const noteNames = currentChord.notes.map(n => n.slice(0, -1));
-      const oct = currentChord.octave;
-      audioEngine.playChord(noteNames, oct);
+      // 使用钢琴音色逐个播放和弦中的音符
+      currentChord.notes.forEach(noteId => {
+        const note = noteId.slice(0, -1);
+        const octave = parseInt(noteId.slice(-1));
+        audioEngine.playPianoNote(note, octave, 1.5);
+      });
       setPlayCount(prev => prev + 1);
     }
   };
@@ -62,6 +65,25 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
   // 播放指定音符（用于复盘）
   const playNoteForReview = (noteItem) => {
     audioEngine.playPianoNote(noteItem.note, noteItem.octave, 1.0);
+  };
+
+  // 按下琴键（触摸或鼠标按下）
+  const handleKeyDown = (noteItem) => {
+    // 播放音符
+    audioEngine.playPianoNote(noteItem.note, noteItem.octave, 0.8);
+
+    // 标记为按下状态
+    setPressedKeys(prev => new Set(prev).add(noteItem.id));
+  };
+
+  // 释放琴键（触摸结束或鼠标抬起）
+  const handleKeyUp = (noteItem) => {
+    // 从按下状态移除
+    setPressedKeys(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(noteItem.id);
+      return newSet;
+    });
   };
 
   // 选择/取消选择音符 或 答题后播放音符（复盘）
@@ -210,8 +232,14 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
                       showResult ? (isCorrectSelection ? 'correct' : '') : ''
                     } ${isWrongSelection ? 'incorrect' : ''} ${
                       missedCorrect ? 'missed' : ''
-                    } ${showResult ? 'reviewable' : ''}`}
+                    } ${showResult ? 'reviewable' : ''} ${
+                      pressedKeys.has(noteId) ? 'pressed' : ''
+                    }`}
                     onClick={() => handleNoteClick(noteItem)}
+                    onTouchStart={(e) => { e.preventDefault(); !showResult && handleKeyDown(noteItem); }}
+                    onTouchEnd={(e) => { e.preventDefault(); !showResult && handleKeyUp(noteItem); }}
+                    onMouseDown={() => !showResult && handleKeyDown(noteItem)}
+                    onMouseUp={() => !showResult && handleKeyUp(noteItem)}
                   >
                     <span className="key-label">{noteId}</span>
                   </button>
@@ -245,9 +273,15 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
                       showResult ? (isCorrectSelection ? 'correct' : '') : ''
                     } ${isWrongSelection ? 'incorrect' : ''} ${
                       missedCorrect ? 'missed' : ''
-                    } ${showResult ? 'reviewable' : ''}`}
+                    } ${showResult ? 'reviewable' : ''} ${
+                      pressedKeys.has(noteId) ? 'pressed' : ''
+                    }`}
                     data-position={position}
                     onClick={() => handleNoteClick(noteItem)}
+                    onTouchStart={(e) => { e.preventDefault(); !showResult && handleKeyDown(noteItem); }}
+                    onTouchEnd={(e) => { e.preventDefault(); !showResult && handleKeyUp(noteItem); }}
+                    onMouseDown={() => !showResult && handleKeyDown(noteItem)}
+                    onMouseUp={() => !showResult && handleKeyUp(noteItem)}
                   >
                     <span className="key-label">{noteId}</span>
                   </button>

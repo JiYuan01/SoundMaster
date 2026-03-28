@@ -1,0 +1,166 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* 多邻国风格的按钮 */
+.duolingo-button {
+  background: linear-gradient(135deg, #58cc02 0%, #58a700 100%);
+  border: none;
+  border-radius: 16px;
+  padding: 16px 32px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(88, 204, 2, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.duolingo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(88, 204, 2, 0.4);
+}
+
+.duolingo-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(88, 204, 2, 0.2);
+}
+
+.duolingo-button.secondary {
+  background: linear-gradient(135deg, #1cb0f6 0%, #4589ff 100%);
+  box-shadow: 0 4px 8px rgba(28, 176, 246, 0.3);
+}
+
+.duolingo-button.secondary:hover {
+  box-shadow: 0 6px 12px rgba(28, 176, 246, 0.4);
+}
+
+.duolingo-button.danger {
+  background: linear-gradient(135deg, #ff4b4b 0%, #ff0000 100%);
+  box-shadow: 0 4px 8px rgba(255, 75, 75, 0.3);
+}
+
+/* 卡片样式 */
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* 进度条 */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #58cc02 0%, #58a700 100%);
+  transition: width 0.5s ease;
+}
+
+/* 成就徽章 */
+.achievement {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+.pulse {
+  animation: pulse 0.3s ease;
+}
+
+.shake {
+  animation: shake 0.3s ease;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .app {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .duolingo-button {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}

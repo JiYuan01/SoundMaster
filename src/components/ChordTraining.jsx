@@ -67,25 +67,6 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
     audioEngine.playPianoNote(noteItem.note, noteItem.octave, 1.0);
   };
 
-  // 按下琴键（触摸或鼠标按下）
-  const handleKeyDown = (noteItem) => {
-    // 播放音符
-    audioEngine.playPianoNote(noteItem.note, noteItem.octave, 0.8);
-
-    // 标记为按下状态
-    setPressedKeys(prev => new Set(prev).add(noteItem.id));
-  };
-
-  // 释放琴键（触摸结束或鼠标抬起）
-  const handleKeyUp = (noteItem) => {
-    // 从按下状态移除
-    setPressedKeys(prev => {
-      const newSet = new Set(prev);
-      newSet.delete(noteItem.id);
-      return newSet;
-    });
-  };
-
   // 选择/取消选择音符 或 答题后播放音符（复盘）
   const handleNoteClick = (noteItem) => {
     if (showResult) {
@@ -93,6 +74,9 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
       playNoteForReview(noteItem);
       return;
     }
+
+    // 播放音符
+    audioEngine.playPianoNote(noteItem.note, noteItem.octave, 0.5);
 
     const noteId = noteItem.id;
     // 答题前选择音符
@@ -232,14 +216,8 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
                       showResult ? (isCorrectSelection ? 'correct' : '') : ''
                     } ${isWrongSelection ? 'incorrect' : ''} ${
                       missedCorrect ? 'missed' : ''
-                    } ${showResult ? 'reviewable' : ''} ${
-                      pressedKeys.has(noteId) ? 'pressed' : ''
-                    }`}
+                    } ${showResult ? 'reviewable' : ''}`}
                     onClick={() => handleNoteClick(noteItem)}
-                    onTouchStart={(e) => { e.preventDefault(); !showResult && handleKeyDown(noteItem); }}
-                    onTouchEnd={(e) => { e.preventDefault(); !showResult && handleKeyUp(noteItem); }}
-                    onMouseDown={() => !showResult && handleKeyDown(noteItem)}
-                    onMouseUp={() => !showResult && handleKeyUp(noteItem)}
                   >
                     <span className="key-label">{noteId}</span>
                   </button>
@@ -273,15 +251,9 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
                       showResult ? (isCorrectSelection ? 'correct' : '') : ''
                     } ${isWrongSelection ? 'incorrect' : ''} ${
                       missedCorrect ? 'missed' : ''
-                    } ${showResult ? 'reviewable' : ''} ${
-                      pressedKeys.has(noteId) ? 'pressed' : ''
-                    }`}
+                    } ${showResult ? 'reviewable' : ''}`}
                     data-position={position}
                     onClick={() => handleNoteClick(noteItem)}
-                    onTouchStart={(e) => { e.preventDefault(); !showResult && handleKeyDown(noteItem); }}
-                    onTouchEnd={(e) => { e.preventDefault(); !showResult && handleKeyUp(noteItem); }}
-                    onMouseDown={() => !showResult && handleKeyDown(noteItem)}
-                    onMouseUp={() => !showResult && handleKeyUp(noteItem)}
                   >
                     <span className="key-label">{noteId}</span>
                   </button>

@@ -67,6 +67,21 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
     audioEngine.playPianoNote(noteItem.note, noteItem.octave, 1.0);
   };
 
+  // 处理触摸开始 - 播放音符并显示按下状态
+  const handleTouchStart = (noteItem) => {
+    audioEngine.playPianoNote(noteItem.note, noteItem.octave, 0.5);
+    setPressedKeys(prev => new Set(prev).add(noteItem.id));
+  };
+
+  // 处理触摸结束 - 隐藏按下状态
+  const handleTouchEnd = (noteItem) => {
+    setPressedKeys(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(noteItem.id);
+      return newSet;
+    });
+  };
+
   // 选择/取消选择音符 或 答题后播放音符（复盘）
   const handleNoteClick = (noteItem) => {
     if (showResult) {
@@ -216,8 +231,12 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
                       showResult ? (isCorrectSelection ? 'correct' : '') : ''
                     } ${isWrongSelection ? 'incorrect' : ''} ${
                       missedCorrect ? 'missed' : ''
-                    } ${showResult ? 'reviewable' : ''}`}
+                    } ${showResult ? 'reviewable' : ''} ${
+                      pressedKeys.has(noteId) ? 'pressed' : ''
+                    }`}
                     onClick={() => handleNoteClick(noteItem)}
+                    onTouchStart={(e) => { e.preventDefault(); handleTouchStart(noteItem); }}
+                    onTouchEnd={(e) => { e.preventDefault(); handleTouchEnd(noteItem); }}
                   >
                     <span className="key-label">{noteId}</span>
                   </button>
@@ -251,9 +270,13 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
                       showResult ? (isCorrectSelection ? 'correct' : '') : ''
                     } ${isWrongSelection ? 'incorrect' : ''} ${
                       missedCorrect ? 'missed' : ''
-                    } ${showResult ? 'reviewable' : ''}`}
+                    } ${showResult ? 'reviewable' : ''} ${
+                      pressedKeys.has(noteId) ? 'pressed' : ''
+                    }`}
                     data-position={position}
                     onClick={() => handleNoteClick(noteItem)}
+                    onTouchStart={(e) => { e.preventDefault(); handleTouchStart(noteItem); }}
+                    onTouchEnd={(e) => { e.preventDefault(); handleTouchEnd(noteItem); }}
                   >
                     <span className="key-label">{noteId}</span>
                   </button>

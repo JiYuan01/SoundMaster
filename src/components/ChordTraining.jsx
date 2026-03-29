@@ -73,13 +73,28 @@ export function ChordTraining({ onBack, onUpdateGameState }) {
     setPressedKeys(prev => new Set(prev).add(noteItem.id));
   };
 
-  // 处理触摸结束 - 隐藏按下状态
+  // 处理触摸结束 - 隐藏按下状态并选择音符
   const handleTouchEnd = (noteItem) => {
     setPressedKeys(prev => {
       const newSet = new Set(prev);
       newSet.delete(noteItem.id);
       return newSet;
     });
+
+    // 答题前选择音符（触摸结束时选择）
+    if (!showResult) {
+      const noteId = noteItem.id;
+      setSelectedAnswers(prev => {
+        if (prev.includes(noteId)) {
+          return prev.filter(n => n !== noteId);
+        } else {
+          if (prev.length < 3) {
+            return [...prev, noteId];
+          }
+          return prev;
+        }
+      });
+    }
   };
 
   // 选择/取消选择音符 或 答题后播放音符（复盘）
